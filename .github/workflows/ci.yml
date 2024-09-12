@@ -66,6 +66,26 @@ jobs:
     - name: Run Bandit security scan
       run: bandit -r todo_project
 
+  # Job de Análise de Dependências com OWASP Dependency-Check
+  dependency_check:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Install OWASP Dependency-Check
+      run: |
+        curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.0/dependency-check-7.4.0-release.zip
+        unzip dependency-check.zip -d dependency-check
+        chmod +x dependency-check/bin/dependency-check.sh
+
+    - name: Run OWASP Dependency-Check
+      run: |
+        ./dependency-check/bin/dependency-check.sh --project "Task Manager" --scan . --format "HTML" --out dependency-report.html
+    - name: Upload dependency report
+      uses: actions/upload-artifact@v3
+      with:
+        name: dependency-report
+        path: dependency-report.html
+
   # Job de Deploy
   deploy:
     runs-on: ubuntu-latest
