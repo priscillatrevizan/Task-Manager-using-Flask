@@ -74,12 +74,13 @@ jobs:
     - name: Install OWASP Dependency-Check
       run: |
         curl -L -o dependency-check.zip https://github.com/jeremylong/DependencyCheck/releases/download/v7.4.0/dependency-check-7.4.0-release.zip
-        unzip dependency-check.zip -d dependency-check
+        unzip dependency-check.zip
         chmod +x dependency-check/bin/dependency-check.sh
 
     - name: Run OWASP Dependency-Check
       run: |
         ./dependency-check/bin/dependency-check.sh --project "Task Manager" --scan . --format "HTML" --out dependency-report.html
+
     - name: Upload dependency report
       uses: actions/upload-artifact@v3
       with:
