@@ -4,7 +4,7 @@ from todo_project import app
 # Verifique se está no ambiente de desenvolvimento
 if os.getenv('FLASK_ENV') == 'development':
     # Em desenvolvimento, usar 0.0.0.0 para facilitar o acesso local
-    host = '0.0.0.0'
+    host = '0.0.0.0' # nosec
 else:
     # Em produção, usar 127.0.0.1 para segurança
     host = '127.0.0.1'
