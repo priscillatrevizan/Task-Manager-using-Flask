@@ -40,7 +40,8 @@ COPY . .
 
 # Copiar o arquivo .env
 #COPY .env .env
-COPY /home/priscillatrevizan_dev/task-manager/Task-Manager-using-Flask/todo_project/todo_project/.env .env
+#COPY /home/priscillatrevizan_dev/task-manager/Task-Manager-using-Flask/todo_project/todo_project/.env .env
+COPY todo_project/todo_project/.env .env
 
 # Comando para rodar o ZAP e o servidor Flask
 CMD ["sh", "-c", "/zap/zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 todo_project/run.py"]
