@@ -1,5 +1,6 @@
 # Use a imagem oficial estável do OWASP ZAP
-FROM zaproxy/zap-stable:latest
+#FROM zaproxy/zap-stable:latest
+FROM ictu/zap2docker-weekly
 
 # Defina o diretório de trabalho na imagem
 WORKDIR /app
@@ -42,4 +43,7 @@ COPY . .
 #COPY .env .env
 
 # Comando para rodar o ZAP e o servidor Flask
-CMD ["sh", "-c", "/zap/zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 todo_project/run.py"]
+#CMD ["sh", "-c", "/zap/zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 todo_project/run.py"]
+
+# Execute o OWASP ZAP e o Flask
+CMD ["sh", "-c", "zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 /app/todo_project/run.py"]
