@@ -104,20 +104,15 @@ jobs:
       run: |
         docker run -d --name owasp-zap -u zap -p 8080:8080 ictu/zap2docker-weekly zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
 
-    # Aguardar o ZAP inicializar
-    - name: Wait for ZAP to start
-      run: sleep 30  # Aguarda o OWASP ZAP inicializar
-
-    # Rodar o Active Scan do OWASP ZAP
-    - name: Run OWASP ZAP Active Scan
+    # Rodar o Active Scan do OWASP ZAP via API
+    - name: Run OWASP ZAP Active Scan using API
       run: |
-        docker exec owasp-zap zap-cli open-url http://localhost:5000
-        docker exec owasp-zap zap-cli active-scan http://localhost:5000
+        curl "http://localhost:8080/JSON/ascan/action/scan/?url=http://localhost:5000&recurse=true"
 
     # Gerar o relatório do OWASP ZAP
     - name: Generate OWASP ZAP Report
       run: |
-        docker exec owasp-zap zap-cli report -o zap_report.html -f html
+        curl "http://localhost:8080/OTHER/core/other/htmlreport/" -o zap_report.html
 
     # Upload do relatório de segurança
     - name: Upload ZAP Report
