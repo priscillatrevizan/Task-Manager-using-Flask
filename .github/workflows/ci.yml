@@ -99,10 +99,10 @@ jobs:
     - name: Clean up old OWASP ZAP containers
       run: docker rm -f owasp-zap || true
 
-    # Rodar o OWASP ZAP em modo daemon
+    # Rodar o OWASP ZAP em modo daemon usando a imagem `ictu/zap2docker-weekly`
     - name: Run OWASP ZAP in daemon mode
       run: |
-        docker run -d --name owasp-zap -u zap -p 8080:8080 -i owasp/zap2docker-weekly zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
+        docker run -d --name owasp-zap -u zap -p 8080:8080 ictu/zap2docker-weekly zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true
 
     # Aguardar o ZAP inicializar
     - name: Wait for ZAP to start
@@ -118,6 +118,14 @@ jobs:
     - name: Generate OWASP ZAP Report
       run: |
         docker exec owasp-zap zap-cli report -o zap_report.html -f html
+
+    # Upload do relatório de segurança
+    - name: Upload ZAP Report
+      uses: actions/upload-artifact@v3
+      with:
+        name: zap-report
+        path: zap_report.html
+
 
   # Job de Deploy
   deploy:
