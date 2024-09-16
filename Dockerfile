@@ -1,5 +1,5 @@
 # Use a imagem oficial estável do OWASP ZAP
-#FROM zaproxy/zap-stable:latest
+#FROM zaproxy/zap-stable:latestdocker logs
 FROM ictu/zap2docker-weekly
 
 # Defina o diretório de trabalho na imagem
@@ -32,9 +32,10 @@ RUN sed -i 's/from jinja2 import Markup/from markupsafe import Markup/' $(pip3 s
 #RUN sed -i 's/JSONEncoder = json.encoder.JSONEncoder/JSONEncoder = json.dumps/' $(pip3 show flask-wtf | grep Location | cut -d' ' -f2)/flask_wtf/recaptcha/widgets.py
 RUN sed -i 's/JSONEncoder = json.JSONEncoder/JSONEncoder = json.dumps/' $(pip3 show flask-wtf | grep Location | cut -d' ' -f2)/flask_wtf/recaptcha/widgets.py
 
-# Exponha as portas 5000 para Flask e 8080 para ZAP
+# Exponha as portas 5000 para Flask, 8080 para ZAP e 9000 para o Graylog
 EXPOSE 5000
 EXPOSE 8080
+EXPOSE 9000
 
 # Copie o resto do código da aplicação
 COPY . .
