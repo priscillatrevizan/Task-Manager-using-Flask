@@ -1,5 +1,4 @@
 # Use a imagem oficial estável do OWASP ZAP
-#FROM zaproxy/zap-stable:latestdocker logs
 FROM ictu/zap2docker-weekly
 
 # Defina o diretório de trabalho na imagem
@@ -29,7 +28,6 @@ RUN sed -i 's/from werkzeug.security import safe_str_cmp/from hmac import compar
 RUN sed -i 's/from jinja2 import Markup/from markupsafe import Markup/' $(pip3 show flask-wtf | grep Location | cut -d' ' -f2)/flask_wtf/form.py
 
 # Substituir o uso incorreto de JSONEncoder no flask_wtf/recaptcha/widgets.py
-#RUN sed -i 's/JSONEncoder = json.encoder.JSONEncoder/JSONEncoder = json.dumps/' $(pip3 show flask-wtf | grep Location | cut -d' ' -f2)/flask_wtf/recaptcha/widgets.py
 RUN sed -i 's/JSONEncoder = json.JSONEncoder/JSONEncoder = json.dumps/' $(pip3 show flask-wtf | grep Location | cut -d' ' -f2)/flask_wtf/recaptcha/widgets.py
 
 # Exponha as portas 5000 para Flask, 8080 para ZAP e 9000 para o Graylog
@@ -40,11 +38,8 @@ EXPOSE 9000
 # Copie o resto do código da aplicação
 COPY . .
 
-# Copiar o arquivo .env
-#COPY .env .env
+# Torna o entrypoint.sh executável
+RUN chmod +x /app/entrypoint.sh
 
-# Comando para rodar o ZAP e o servidor Flask
-#CMD ["sh", "-c", "/zap/zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 todo_project/run.py"]
-
-# Execute o OWASP ZAP e o Flask
-CMD ["sh", "-c", "zap.sh -daemon -host 0.0.0.0 -port 8080 & python3 /app/todo_project/run.py"]
+# Comando para rodar o ZAP, esperar pelo Graylog e rodar o Flask
+CMD ["/app/entrypoint.sh"]
