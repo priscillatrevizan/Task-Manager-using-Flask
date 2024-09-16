@@ -106,7 +106,7 @@ jobs:
 
     # Esperar até o OWASP ZAP estar pronto
     - name: Wait for OWASP ZAP to be ready
-      run: sleep 60  # Aguarda 60 segundos para garantir que o ZAP esteja pronto
+      run: sleep 60  # Aguarda 60 segundos 
 
     # Rodar o Active Scan do OWASP ZAP via API
     - name: Run OWASP ZAP Active Scan using API
