@@ -15,7 +15,7 @@ RUN pip3 install gunicorn python-dotenv && pip3 install --upgrade flask-wtf
 
 # Copie o arquivo requirements.txt e instale as dependências do Python
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Substituir 'safe_str_cmp' no 'flask_bcrypt.py' e 'flask_wtf/csrf.py'
 RUN sed -i 's/from werkzeug.security import safe_str_cmp/from hmac import compare_digest as safe_str_cmp/' $(pip3 show flask-bcrypt | grep Location | cut -d' ' -f2)/flask_bcrypt.py && \
@@ -46,4 +46,4 @@ RUN chmod +x /app/entrypoint.sh
 USER zap
 
 # Comando para rodar o ZAP, esperar pelo Graylog e rodar o Flask
-CMD ["/app/entrypoint.sh"]
+CMD ["/entrypoint.sh"]
