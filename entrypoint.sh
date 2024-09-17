@@ -5,7 +5,7 @@ zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.addrs.addr.regex=true -confi
 
 # Espera o Graylog estar disponível
 echo "Esperando pelo Graylog..."
-while ! curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/api/system | grep "200"; do
+while ! curl -s -o /dev/null -w "%{http_code}" http://192.168.3.75:9000/api/system | grep "200"; do
   echo "Aguardando Graylog estar disponível..."
   sleep 10
 done

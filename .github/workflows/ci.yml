@@ -111,12 +111,13 @@ jobs:
     # Rodar o Active Scan do OWASP ZAP via API
     - name: Run OWASP ZAP Active Scan using API
       run: |
-        curl "http://localhost:8080/JSON/ascan/action/scan/?url=http://localhost:5000&recurse=true"
+        curl "http://192.168.3.75:8080/JSON/ascan/action/scan/?url=http://192.168.3.75:5000&recurse=true"
+
 
     # Gerar o relatório do OWASP ZAP
     - name: Generate OWASP ZAP Report
       run: |
-        curl "http://localhost:8080/OTHER/core/other/htmlreport/" -o zap_report.html
+        curl "http://192.168.3.75:8080/OTHER/core/other/htmlreport/" -o zap_report.html
 
     # Upload do relatório de segurança
     - name: Upload ZAP Report
@@ -150,21 +151,21 @@ jobs:
     # Subir container Graylog
     - name: Run Graylog in Docker
       run: |
-        docker run -d --name graylog -p 9000:9000 -p 12201:12201 -p 514:514 graylog/graylog:4.2
+        docker run -d --name graylog -p 9000:9000 -p 12201:12201 -p 1024:1024 graylog/graylog:4.2
     
     # Esperar até Graylog estar pronto
     - name: Wait for Graylog to be ready
       run: |
-        until curl -s -o /dev/null -w "%{http_code}" http://localhost:9000/api/system | grep "200"; do echo "Waiting for Graylog..."; sleep 10; done
+        until curl -s -o /dev/null -w "%{http_code}"http://192.168.3.75:9000/api/system | grep "200"; do echo "Waiting for Graylog..."; sleep 10; done
 
     # Configurar Graylog via API
     - name: Configure Graylog
       run: |
-        curl -u admin:admin_password -X POST "http://localhost:9000/api/system/inputs" -H "Content-Type: application/json" \
+        curl -u admin:admin_password -X POST "http://192.168.3.75:9000/api/system/inputs" -H "Content-Type: application/json" \
         -d '{"title": "Task Manager Logs", "global": true, "type": "org.graylog2.inputs.syslog.udp.SyslogUDPInput", "configuration": {"bind_address": "0.0.0.0", "port": 514}}'
 
     # Verificar logs
     - name: Verify Graylog Logs
       run: |
-        curl -u admin:admin_password "http://localhost:9000/api/search/universal/relative?query=message%3A%22Task+Manager%22&range=300"
+        curl -u admin:admin_password "http://192.168.3.75:9000/api/search/universal/relative?query=message%3A%22Task+Manager%22&range=300"
 
