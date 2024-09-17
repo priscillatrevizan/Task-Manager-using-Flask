@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y curl wget unzip python3 python3-pip
 RUN pip3 install gunicorn python-dotenv && pip3 install --upgrade flask-wtf
 
 # Copie o arquivo requirements.txt e instale as dependências do Python
-COPY requirements.txt requirements.txt
+COPY todo_project/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Substituir 'safe_str_cmp' no 'flask_bcrypt.py' e 'flask_wtf/csrf.py'
