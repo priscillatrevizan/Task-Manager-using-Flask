@@ -38,6 +38,10 @@ EXPOSE 9000
 # Copie o resto do código da aplicação
 COPY . .
 
+# Copie o arquivo entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Torna o entrypoint.sh executável
 USER root
 RUN chmod +x /app/entrypoint.sh
