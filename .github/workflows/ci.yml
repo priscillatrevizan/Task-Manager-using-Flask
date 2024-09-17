@@ -106,7 +106,7 @@ jobs:
 
     # Esperar até o OWASP ZAP estar pronto
     - name: Wait for OWASP ZAP to be ready
-      run: sleep 60  # Aguarda 60 segundos 
+      run: sleep 180  # Aguarda 180 segundos 
 
     # Rodar o Active Scan do OWASP ZAP via API
     - name: Run OWASP ZAP Active Scan using API
@@ -151,7 +151,7 @@ jobs:
     # Subir container Graylog
     - name: Run Graylog in Docker
       run: |
-        docker run -d --name graylog -p 9000:9000 -p 12201:12201 -p 1024:1024 graylog/graylog:4.2
+        docker run -d --name graylog -p 9000:9000 -p 12202:12201 -p 1024:1024 graylog/graylog:4.2
     
     # Esperar até Graylog estar pronto
     - name: Wait for Graylog to be ready

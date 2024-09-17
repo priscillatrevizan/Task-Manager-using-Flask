@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - graylog
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - network.host=0.0.0.0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - graylog
+
+  graylog:
+    image: graylog/graylog:6.0.6
+    container_name: graylog
+    environment:
+      - GRAYLOG_HTTP_BIND_ADDRESS=0.0.0.0:9000
+      - GRAYLOG_PASSWORD_SECRET=senhagravilog123
+      - GRAYLOG_ROOT_PASSWORD_SHA2=0d3beddb25c774e3b79bd4f839ef6283e00c581538758f38b99994dcdd45e281
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://192.168.3.75:9000/
+      - GRAYLOG_ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on:
+      - mongo
+      - elasticsearch
+    ports:
+      - "192.168.3.75:9000:9000"
+      - "12202:12201/udp"
+    volumes:
+      - ./graylog/server.conf:/etc/graylog/server/server.conf
+    networks:
+      - graylog
+
+  owaspzap:
+    image: ictu/zap2docker-weekly
+    container_name: owaspzap
+    command: zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.addrs.addr.regex=true -config api.addrs.addr.name=.* -config api.disablekey=true > /app/zap.log 2>&1 &
+    ports:
+      - "192.168.3.75:8080:8080"
+    networks:
+      - graylog
+
+  flask-app:
+    image: flask-app
+    container_name: flask-app
+    build:
+      context: .
+    ports:
+      - "192.168.3.75:5000:5000"
+    networks:
+      - graylog
+
+volumes:
+  mongo_data:
+  es_data:
+  graylog_data:
+
+networks:
+  graylog:
+    driver: bridge
+

@@ -47,4 +47,3 @@ USER zap
 
 # Comando para rodar o ZAP, esperar pelo Graylog e rodar o Flask
 CMD ["/app/entrypoint.sh"]
-
