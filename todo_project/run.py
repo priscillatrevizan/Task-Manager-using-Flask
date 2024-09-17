@@ -9,7 +9,7 @@ from pygelf import GelfHttpHandler  # Atualizado para pygelf
 def wait_for_graylog(graylog_url, retries=5, delay=5):
     for _ in range(retries):
         try:
-            response = requests.get(graylog_url)
+            response = requests.get(graylog_url,timeout=5)
             if response.status_code == 200:
                 app.logger.info("Graylog está disponível.")
                 return True
