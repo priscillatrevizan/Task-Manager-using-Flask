@@ -12,3 +12,4 @@ Bcrypt==4.2.0
 certifi==2024.6.2
 python-dotenv==1.0.1
 requests==2.32.3
+bandit==1.7.9
