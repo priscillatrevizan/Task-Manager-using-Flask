@@ -1,0 +1,11 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "scripts": {
+    "start-ngrok": "ngrok start --all",
+    "start": "node app.js"
+  },
+  "devDependencies": {
+    "ngrok": "^3.16.0"
+  }
+}

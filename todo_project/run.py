@@ -9,14 +9,14 @@ from pygelf import GelfHttpHandler  # Atualizado para pygelf
 def wait_for_graylog(graylog_url, retries=5, delay=5):
     for _ in range(retries):
         try:
-            response = requests.get(graylog_url)
+            response = requests.get(graylog_url, timeout=5)  # Adicionando o timeout
             if response.status_code == 200:
                 app.logger.info("Graylog está disponível.")
                 return True
         except requests.ConnectionError:
             app.logger.warning("Graylog não está disponível. Tentando novamente...")
             time.sleep(delay)
-    app.logger.warning("Graylog não foi encontrado após várias tentativas. A aplicação continuará a iniciar.")
+    app.logger.error("Graylog não foi encontrado após várias tentativas.")
     return False
 
 # Verifique se está no ambiente de desenvolvimento

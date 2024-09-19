@@ -1,0 +1,7 @@
+tunnels:
+  web:
+    proto: http
+    addr: 8080
+  graylog:
+    proto: http
+    addr: 9000
