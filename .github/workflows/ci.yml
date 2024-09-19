@@ -108,10 +108,10 @@ jobs:
     - name: Wait for OWASP ZAP to be ready
       run: sleep 180  # Aguarda 180 segundos 
 
-    # Rodar o Active Scan do OWASP ZAP via API 8080 port
+    # Rodar o Active Scan do OWASP ZAP via API
     - name: Run OWASP ZAP Active Scan using API
       run: |
-        curl "https://29ed-2804-3b0-9219-7189-1cae-c5f7-b752-cf79.ngrok-free.app/JSON/ascan/action/scan/?url=http://192.168.3.75:5000&recurse=true"
+        curl "https://460c-2804-3b0-9219-7189-1cae-c5f7-b752-cf79.ngrok-free.app/JSON/ascan/action/scan/?url=http://192.168.3.75:5000&recurse=true"
 
 
     # Gerar o relatório do OWASP ZAP
